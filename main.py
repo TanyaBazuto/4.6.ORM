@@ -2,7 +2,7 @@ import sqlalchemy
 from sqlalchemy.orm import sessionmaker
 from models import create_tables, Publisher, Book, Stock, Shop, Sale
 
-DSN = 'postgresql://postgres:nfnmzyf11-6886@localhost:5432/ORM'
+DSN = 'postgresql://postgres:password@localhost:5432/ORM'
 engine = sqlalchemy.create_engine(DSN)
 create_tables(engine)
 
