@@ -1,16 +1,23 @@
-# This is a sample Python script.
+import sqlalchemy
+from sqlalchemy.orm import sessionmaker
+from models import create_tables, Publisher, Book, Stock, Shop, Sale
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+DSN = 'postgresql://postgres:nfnmzyf11-6886@localhost:5432/ORM'
+engine = sqlalchemy.create_engine(DSN)
+create_tables(engine)
+
+# создание сессии
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# создание объектов
+p1 = Publisher(name='Александр Пушкин')
+p2 = Publisher(name='Федор Достоевский')
+
+session.add_all([p1, p2])
+session.commit()
+print(p1.id, p2.id)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+session.close()
