@@ -13,7 +13,7 @@ def create_connection(sqlsystem, login, password, host, port, db_name):
     return engine
 
 
-engine = create_connection('postgresql', 'postgres', 'nfnmzyf11-6886', 'localhost', 5432, 'ORM')
+engine = create_connection('postgresql', 'postgres', 'password', 'localhost', 5432, 'ORM')
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -60,5 +60,5 @@ def sale_list(search=input('Введите идентификатор или и�
 session.close()
 
 if __name__ == '__main__':
-    create_connection('postgresql', 'postgres', 'nfnmzyf11-6886', 'localhost', 5432, 'ORM')
+    create_connection('postgresql', 'postgres', 'password', 'localhost', 5432, 'ORM')
     sale_list()
