@@ -3,11 +3,14 @@ from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
 
+
 class Publisher(Base):
-    __tablename__ = 'publilsher'
+    __tablename__ = 'publisher'
 
     id = sq.Column(sq.Integer, primary_key=True)
-    name = sq.Column(sq.String, unique=True, nullable=False)
+    name = sq.Column(sq.String, unique=True)
+
+    # book = relationship('Book', back_populates='publisher')
 
     def __str__(self):
         return f'Publisher: {self.id}:{self.name}'
@@ -20,7 +23,10 @@ class Book(Base):
     title = sq.Column(sq.String, nullable=False)
     id_publisher = sq.Column(sq.Integer, sq.ForeignKey('publisher.id'), nullable=False)
 
-    publisher = relationship('Publisher', backref='book')
+    # publisher = relationship(Publisher, back_populates='book')
+    # stock2 = relationship('Stock', back_populates='book2')
+
+    publisher = relationship("Publisher", backref="books")
 
     def __str__(self):
         return f'Book: {self.id}:{self.title}'
@@ -31,6 +37,8 @@ class Shop(Base):
 
     id = sq.Column(sq.Integer, primary_key=True)
     name = sq.Column(sq.String, unique=True)
+
+    # stock = relationship('Stock', back_populates='shop')
 
     def __str__(self):
         return f'Shop: {self.id}:{self.name}'
@@ -44,25 +52,28 @@ class Stock(Base):
     id_shop = sq.Column(sq.Integer, sq.ForeignKey('shop.id'), nullable=False)
     count = sq.Column(sq.Integer, nullable=False)
 
-    book = relationship('Book', backref='stock')
-    shop = relationship('Shop', backref='stock')
-    sale = relationship('Sale', backref='stock')
-
+    # shop = relationship(Shop, back_populates='stock')
+    # book2 = relationship(Book, back_populates='stock2')
+    # sale = relationship('Sale', back_populates='stock3')
+    publisher = relationship("Book", backref="stock")
+    publisher = relationship("Shop", backref="stock")
 
 class Sale(Base):
     __tablename__ = 'sale'
 
     id = sq.Column(sq.Integer, primary_key=True)
     price = sq.Column(sq.Float, nullable=False)
-    data_sale = sq.Column(sq.Date, nullable=False)
+    date_sale = sq.Column(sq.Date, nullable=False)
     id_stock = sq.Column(sq.Integer, sq.ForeignKey('stock.id'), nullable=False)
     count = sq.Column(sq.Integer, nullable=False)
 
-    stock = relationship('Stock', backref='sale')
+    # stock3 = relationship(Stock, back_populates='sale')
+    publisher = relationship("Stock", backref="sale")
+
     def __str__(self):
         return f'Sale: {self.price}:{self.data_sale}'
 
 
 def create_tables(engine):
-    # Base.metadata.drop_all(engine)
+    Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
